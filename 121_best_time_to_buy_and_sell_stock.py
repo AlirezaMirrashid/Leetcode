@@ -46,17 +46,30 @@ def max_profit(prices: List[int]) -> int:
         int: The maximum profit that can be achieved.
     """
     l, r = 0, 1
-    maxP = 0
+    max_profit_val = 0
 
     while r < len(prices):
         if prices[l] < prices[r]:
             profit = prices[r] - prices[l]
-            maxP = max(maxP, profit)
+            max_profit_val = max(max_profit_val, profit)
         else:
             l = r
         r += 1
-    return maxP
+    return max_profit_val
 
+    # if not prices:
+        # return 0
+
+    # min_price = float('inf')
+    # max_profit_val = 0
+
+    # for price in prices:
+        # if price < min_price:
+            # min_price = price  # Update minimum price so far
+        # else:
+            # max_profit_val = max(max_profit_val, price - min_price)  # Update maximum profit
+
+    # return max_profit_val
 
 # Sample Test Cases
 if __name__ == "__main__":
