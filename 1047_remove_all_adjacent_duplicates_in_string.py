@@ -32,10 +32,7 @@ def removeDuplicates(s: str) -> str:
     """
     This function removes all adjacent duplicate characters from the string `s` until no more adjacent duplicates
     remain. The process continues until there are no further adjacent duplicate pairs to remove.
-    
-    Time Complexity: O(n), where n is the length of the string `s`. We only iterate through the string once.
-    Space Complexity: O(n), since we use a stack to store characters which can be up to the length of the string.
-    
+
     Args:
         s (str): The input string from which adjacent duplicates need to be removed.
     
