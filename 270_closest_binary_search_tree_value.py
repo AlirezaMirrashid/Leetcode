@@ -1,12 +1,14 @@
 """
-🔵 LeetCode 270: Closest Binary Search Tree Value
+🔷 LeetCode 270 - Closest Binary Search Tree Value
 
-Given a non-empty binary search tree and a target value (floating point), find the value in the BST 
-that is closest to the target. You are guaranteed to have only one unique value in the BST that is 
-closest to the target.
+📘 Problem:
+Given the root of a binary search tree (BST) and a target value, return the value in the BST that is closest to the target.
 
------------------------------------
-Example:
+📌 Notes:
+- The target value is a floating-point number.
+- It is guaranteed that there is exactly one value in the BST that is closest to the target.
+
+🧠 Example:
 Input: root = [4,2,5,1,3], target = 3.714286
 
         4
@@ -16,73 +18,75 @@ Input: root = [4,2,5,1,3], target = 3.714286
     1   3
 
 Output: 4
-Explanation: The value 4 is the closest to the target 3.714286 in the given BST.
 
------------------------------------
-Constraints:
-    - The BST is non-empty.
-    - The target is a floating point.
+🔒 Constraints:
+- The tree is non-empty.
 """
 
 from typing import Optional
 
+# Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val: int = 0, left: Optional['TreeNode'] = None, right: Optional['TreeNode'] = None):
         self.val = val
         self.left = left
         self.right = right
 
-def closestValue(root: TreeNode, target: float) -> int:
-    """
-    Finds the value in the BST that is closest to the given target.
+class Solution:
+    def closestValue(self, root: TreeNode, target: float) -> int:
+        """
+        ✅ Binary Search-like traversal (Iterative)
+        Traverse the BST to find the value closest to the target.
 
-    Approach:
-      - Initialize the closest value as the root's value.
-      - Traverse the BST iteratively using the BST property:
-            * If the current node's value is closer to target than the current closest, update the closest.
-            * If target is less than the current node's value, move to the left child.
-            * Otherwise, move to the right child.
-      - Continue until the traversal is complete.
-    
-    Time Complexity: O(h), where h is the height of the BST.
-    Space Complexity: O(1), since only constant extra space is used.
-    
-    Args:
-        root (TreeNode): The root node of the BST.
-        target (float): The target value to find the closest number to.
-    
-    Returns:
-        int: The value in the BST that is closest to the target.
-    """
-    closest = root.val
-    current = root
-    while current:
-        if abs(current.val - target) < abs(closest - target):
-            closest = current.val
-        # Traverse according to BST properties
-        if target < current.val:
-            current = current.left
-        else:
-            current = current.right
-    return closest
+        ⏱ Time Complexity: O(h), where h is the height of the tree (O(log n) if balanced, O(n) worst-case)
+        💾 Space Complexity: O(1)
+        """
+        closest = root.val
+        while root:
+            if abs(root.val - target) < abs(closest - target):
+                closest = root.val
+            root = root.left if target < root.val else root.right
+        return closest
 
-# Sample Test Cases
+    def closestValueRecursive(self, root: TreeNode, target: float) -> int:
+        """
+        ✅ Recursive approach
+        Compare current node and recurse in the relevant subtree.
+
+        ⏱ Time Complexity: O(h)
+        💾 Space Complexity: O(h) due to recursion stack
+        """
+        def dfs(node: TreeNode, closest: int) -> int:
+            if not node:
+                return closest
+            if abs(node.val - target) < abs(closest - target):
+                closest = node.val
+            if target < node.val:
+                return dfs(node.left, closest)
+            else:
+                return dfs(node.right, closest)
+        return dfs(root, root.val)
+
+
+# 🔸 Example Usage:
 if __name__ == "__main__":
-    # Construct the BST:
-    #         4
-    #        / \
-    #       2   5
-    #      / \
-    #     1   3
-    node1 = TreeNode(1)
-    node3 = TreeNode(3)
-    node2 = TreeNode(2, node1, node3)
-    node5 = TreeNode(5)
-    root = TreeNode(4, node2, node5)
-    
-    target = 3.714286
-    print("Example Output:", closestValue(root, target))  # Expected: 4
+    # Manually constructing the BST from the example: [4,2,5,1,3]
+    root = TreeNode(4)
+    root.left = TreeNode(2)
+    root.right = TreeNode(5)
+    root.left.left = TreeNode(1)
+    root.left.right = TreeNode(3)
 
-# ------------------------------------------------
-# ✅ Time Complexity: O(h), where h is the height of the BST.
-# ✅ Space Complexity: O(1), as the algorithm uses constant extra space.
+    target = 3.714286
+    sol = Solution()
+    print("Closest (Iterative):", sol.closestValue(root, target))   # Output: 4
+    print("Closest (Recursive):", sol.closestValueRecursive(root, target))  # Output: 4
+
+"""
+🧠 Complexity Analysis:
+- Time Complexity: O(h), where h is the height of the BST.
+- Space Complexity:
+    - Iterative: O(1)
+    - Recursive: O(h) due to call stack
+"""
+
